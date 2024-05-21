@@ -1,0 +1,107 @@
+body {
+    background-color: white; 
+    margin: 0; 
+    padding: 0; 
+    font-family: Arial, sans-serif;
+}
+
+.note-cnt {
+    margin-top: 150px;
+    margin-left: -250px;
+}
+
+.note-card {
+    border: 1px solid gray;
+    height: 100px;
+    width: 300px;
+    margin-top: 11px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    &:hover{
+        .note-card-footer {
+            visibility: visible;
+        }
+    }
+}
+
+.note-card-title-container {
+    height: 41px;
+    margin-left: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.note-card-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.note-card-pin-field .icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    /* visibility: hidden; */
+}
+
+.note-card-description {
+    margin-left: 12px;
+    height: 36.5px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.note-card-footer {
+    margin-top: 21px;
+    width: 256px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 12px;
+    visibility: hidden;
+}
+
+
+.note-card-footer-image .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid gray;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.menu.open {
+    display: block;
+}
+
+.color-palette-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 32px;
+}
+
+.color-palette-container .color {
+    width: 32px;
+    height: 32px;
+    margin: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+}
