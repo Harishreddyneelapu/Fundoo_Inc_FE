@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const config = {
   'Authorization': `Bearer ${localStorage.getItem('AuthToken')}`,
-  // 'Content-Type': 'application/json'
 }
 
 export const createNoteApiCall = async (data) => {

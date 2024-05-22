@@ -17,7 +17,7 @@ function TrashContainer() {
     }, [notesData])
 
     const handleUpdateNotesList = (action,data) => {
-        // setNotesData([...notesData, data]);
+        
         if(action==="restore"){
             const filteredData = notesData.filter(note => note._id !== data._id)
             setNotesData(filteredData);

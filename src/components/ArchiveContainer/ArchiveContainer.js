@@ -17,8 +17,6 @@ function ArchiveContainer(){
     }, [notesData])
 
     const handleUpdateNotesList = (action,data) => {
-        // setNotesData([...notesData, data]);
-
         if(action==="unarchive"){
             const filteredData = notesData.filter(note => note._id !== data._id);
             setNotesData(filteredData);

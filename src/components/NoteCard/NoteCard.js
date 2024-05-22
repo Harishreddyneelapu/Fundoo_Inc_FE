@@ -70,13 +70,6 @@ function NoteCard(props) {
         setMoreAnchorEl(null);
     };
 
-    // const handleDeleteClick = (note) => {
-    //     trashNoteApiCall(note._id);
-    //     updateList('delete', note);
-    //     handleMoreClose();
-    // };
-
-
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -128,7 +121,7 @@ function NoteCard(props) {
                                             </Tooltip>
                                             <Tooltip title="Add Image">
                                                 <div className="note-card-footer-image">
-                                                    <img src={File_Image} alt="Add Image" className="icon cursor-pointer" />
+                                                    <img src={File_Image} alt="Add_Image" className="icon cursor-pointer" />
                                                 </div>
                                             </Tooltip>
                                             {container === "archiveCnt" ? <Tooltip title="Unarchive">
