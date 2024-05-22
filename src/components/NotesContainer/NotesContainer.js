@@ -17,14 +17,27 @@ function NotesContainer() {
         console.log(notesData)
     }, [notesData])
 
-    const handleUpdateNotesList = (data) => {
-        setNotesData([...notesData, data]);
+    const handleUpdateNotesList = (action, data) => {
+        if(action === "add") {
+
+            setNotesData([...notesData, data]);
+        }
+
+
+        if (action === 'archive') {
+            const filteredData = notesData.filter(note => note._id !== data._id);
+            setNotesData(filteredData);
+        }
+        else if(action ==='trash'){
+            const filteredData = notesData.filter(note => note._id !== data._id)
+            setNotesData(filteredData);
+        }
     }
 
     return (
         <>
             <NoteCnt updateList={handleUpdateNotesList} />
-            <NoteCard notesList={notesData} container={"notesCnt"} />
+            <NoteCard updateList={handleUpdateNotesList} notesList={notesData} container={"notesCnt"} />
         </>)
 }
 

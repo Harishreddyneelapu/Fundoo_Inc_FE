@@ -43,7 +43,7 @@ function NoteCnt(props) {
                 "title": title,
                 "description": description
             });
-            updateList(res.data.data)
+            updateList("add", res.data.data)
         }
         setCreateNote(!createNote);
         console.log(createNote);

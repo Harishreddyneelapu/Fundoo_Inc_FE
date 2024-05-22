@@ -16,13 +16,18 @@ function ArchiveContainer(){
         console.log(notesData)
     }, [notesData])
 
-    const handleUpdateNotesList = (data) => {
-        setNotesData([...notesData, data]);
+    const handleUpdateNotesList = (action,data) => {
+        // setNotesData([...notesData, data]);
+
+        if(action==="unarchive"){
+            const filteredData = notesData.filter(note => note._id !== data._id);
+            setNotesData(filteredData);
+        }
     }
 
 
     return(<>
-    <NoteCard notesList={notesData} container={"archiveCnt"}/></>)
+    <NoteCard updateList={handleUpdateNotesList} notesList={notesData} container={"archiveCnt"}/></>)
 }
 
 export default ArchiveContainer;

@@ -6,21 +6,21 @@ body {
 }
 
 .note-cnt {
-    margin-top: 150px;
+    margin-top: 50px;
     margin-left: -250px;
 }
 
 .note-card {
     border: 1px solid gray;
     height: 100px;
-    width: 300px;
+    width: 250px;
     margin-top: 11px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 450px;
+    /* margin-right: auto; */
     &:hover{
         .note-card-footer {
             visibility: visible;
@@ -59,11 +59,11 @@ body {
 
 .note-card-footer {
     margin-top: 21px;
-    width: 256px;
+    width: 235px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 12px;
+    margin-left: 10px;
     visibility: hidden;
 }
 
@@ -71,6 +71,7 @@ body {
 .note-card-footer-image .icon {
     width: 16px;
     height: 16px;
+    margin-left: -1px;
 }
 
 .cursor-pointer {

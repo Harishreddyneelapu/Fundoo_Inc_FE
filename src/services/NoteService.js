@@ -13,7 +13,7 @@ export const createNoteApiCall = async (data) => {
 
 export const deleteNoteApiCall = async (_id) => {
 
-  let prom = await axios.delete("http://localhost:3000/api/notes/${_id}", { headers: config })
+  let prom = await axios.delete(`http://localhost:3000/api/notes/${_id}`, { headers: config })
   return prom
 }
 
@@ -24,10 +24,10 @@ export const getAllNotesApiCall = async () => {
 }
 
 export const trashNoteApiCall = async (_id) => {
-  const res = await axios.put("http://localhost:3000/api/notes/${_id}/isTrash","",{headers:config})
+  const res = await axios.put(`http://localhost:3000/api/notes/${_id}/isTrash`,"",{headers:config})
   return res;
 }
 export const archiveNoteApiCall = async (_id)=>{
-  const res = await axios.put("http://localhost:3000/api/notes/${_id}/isArchive","",{headers:config})
+  const res = await axios.put(`http://localhost:3000/api/notes/${_id}/isArchive`,"",{headers:config})
   return res;
 }
