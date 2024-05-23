@@ -19,18 +19,26 @@ function NotesContainer() {
 
     const handleUpdateNotesList = (action, data) => {
         if(action === "add") {
-
             setNotesData([...notesData, data]);
         }
 
 
-        if (action === 'archive') {
+        else if (action === 'archive') {
             const filteredData = notesData.filter(note => note._id !== data._id);
             setNotesData(filteredData);
         }
         else if(action ==='trash'){
             const filteredData = notesData.filter(note => note._id !== data._id)
             setNotesData(filteredData);
+        }
+        else if(action ==='color'){
+            const updatedList = notesData.map((note)=>{
+                if(note._id === data._id){
+                    return data;
+                }
+                return note;
+            })
+            setNotesData(updatedList)
         }
     }
 

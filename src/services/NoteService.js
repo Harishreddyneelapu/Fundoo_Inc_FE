@@ -30,3 +30,8 @@ export const archiveNoteApiCall = async (_id)=>{
   const res = await axios.put(`http://localhost:3000/api/notes/${_id}/isArchive`,"",{headers:config})
   return res;
 }
+
+export const colorNoteApiCall = async (_id,data)=>{
+  const res = await axios.put(`http://localhost:3000/api/notes/${_id}/color`,data,{headers:config})
+  return res;
+}
