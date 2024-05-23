@@ -17,10 +17,21 @@ function ArchiveContainer(){
     }, [notesData])
 
     const handleUpdateNotesList = (action,data) => {
-        // setNotesData([...notesData, data]);
-
         if(action==="unarchive"){
-            const filteredData = notesData.filter(note => note._id !== data._id);
+            const filteredData = notesData.filter(note => note._id !== data._id && !note.isTrash);
+            setNotesData(filteredData);
+        }
+        else if(action ==='color'){
+            const updatedList = notesData.map((note)=>{
+                if(note._id === data._id){
+                    return data;
+                }
+                return note;
+            })
+            setNotesData(updatedList)
+        }
+        else if(action ==='trash'){
+            const filteredData = notesData.filter(note => note._id !== data._id)
             setNotesData(filteredData);
         }
     }

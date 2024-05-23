@@ -14,7 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Restore from "../../assests/restore-page-svgrepo-com.svg";
 import './NoteCard.css';
 
-import { deleteNoteApiCall, trashNoteApiCall, archiveNoteApiCall } from "../../services/NoteService";
+import { deleteNoteApiCall, trashNoteApiCall, archiveNoteApiCall, colorNoteApiCall } from "../../services/NoteService";
 
 function NoteCard(props) {
     const { notesList, container, updateList } = props;
@@ -22,6 +22,7 @@ function NoteCard(props) {
     const [moreAnchorEl, setMoreAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const moreOpen = Boolean(moreAnchorEl);
+    const [noteData,setNoteData]=useState({});
 
     const colors = [
         { hex: "#FFFFFF", name: "Default", class: "col1" },
@@ -38,31 +39,38 @@ function NoteCard(props) {
         { hex: "#EFEFF1", name: "Chalk", class: "col12" }
     ];
 
-    const handleIconClick = (event, data) => {
+    const handleIconClick =async (event, data, color) => {
         if (event === 'deleteForever') {
             deleteNoteApiCall(data._id);
             updateList(event,data)
         }
-        if (event === 'restore') {
+        else if (event === 'restore') {
             trashNoteApiCall(data._id);
             updateList(event,data)
         }
-        if (event === 'unarchive') {
+        else if (event === 'unarchive') {
             archiveNoteApiCall(data._id);
             updateList(event, data);
         }
-        if (event === 'archive') {
+        else if (event === 'archive') {
             archiveNoteApiCall(data._id);
             updateList(event, data);
         }
-        if(event==='trash'){
+        else if(event==='trash'){
             handleMoreClose();
-            trashNoteApiCall(data._id)
-            updateList(event,data);
+            trashNoteApiCall(noteData._id)
+            updateList(event,noteData);
+        }
+        else if(event==='color'){
+            await colorNoteApiCall(data._id,{
+                "color":color
+            })
+            updateList(event,{...noteData, color: color})
         }
     };
 
-    const handleMoreClick = (event) => {
+    const handleMoreClick = (event,obj) => {
+        setNoteData(obj);
         setMoreAnchorEl(event.currentTarget);
     };
 
@@ -70,21 +78,14 @@ function NoteCard(props) {
         setMoreAnchorEl(null);
     };
 
-    // const handleDeleteClick = (note) => {
-    //     trashNoteApiCall(note._id);
-    //     updateList('delete', note);
-    //     handleMoreClose();
-    // };
-
-
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const handleColorSelect = (color) => {
-        console.log("Color selected:", color);
-        setAnchorEl(null);
-    };
+    // const handleColorSelect = (color) => {
+    //     console.log("Color selected:", color);
+    //     setAnchorEl(null);
+    // };
 
     return (
         <>
@@ -92,7 +93,7 @@ function NoteCard(props) {
                 {notesList.map(noteObj => {
                     return (
                         <div className="note-cnt" key={noteObj._id}>
-                            <div className="note-card">
+                            <div className="note-card" style={{backgroundColor: noteObj?.color}}>
                                 <div className="note-card-title-container">
                                     <span className="note-card-title">{noteObj.title}</span>
                                     <Tooltip title="Pin">
@@ -123,12 +124,17 @@ function NoteCard(props) {
                                                 </div>
                                             </Tooltip><Tooltip title="Background color">
                                                 <div className="note-card-footer-image">
-                                                    <img src={Background_color} alt="Background Color" className="icon cursor-pointer" onClick={(e) => setAnchorEl(e.currentTarget)} />
+                                                    <img src={Background_color} alt="Background Color" className="icon cursor-pointer" 
+                                                    onClick={(e) => {
+                                                        setNoteData(noteObj)
+                                                        setAnchorEl(e.currentTarget)
+                                                    }}
+                                                    />
                                                 </div>
                                             </Tooltip>
                                             <Tooltip title="Add Image">
                                                 <div className="note-card-footer-image">
-                                                    <img src={File_Image} alt="Add Image" className="icon cursor-pointer" />
+                                                    <img src={File_Image} alt="Add_Image" className="icon cursor-pointer" />
                                                 </div>
                                             </Tooltip>
                                             {container === "archiveCnt" ? <Tooltip title="Unarchive">
@@ -144,7 +150,7 @@ function NoteCard(props) {
                                             }
                                             <Tooltip title="More options">
                                                 <div className="note-card-footer-image">
-                                                    <img src={More} alt="More options" className="icon cursor-pointer" onClick={handleMoreClick} />
+                                                    <img src={More} alt="More options" className="icon cursor-pointer" onClick={(e)=>handleMoreClick(e,noteObj)} />
                                                 </div>
                                             </Tooltip>
                                         </>
@@ -163,7 +169,7 @@ function NoteCard(props) {
                                                 <div
                                                     className="color"
                                                     style={{ backgroundColor: color.hex }}
-                                                    onClick={() => handleColorSelect(color.hex)}
+                                                    onClick={() => handleIconClick('color',noteData,color.hex)}
                                                 ></div>
                                             </Tooltip>
                                         ))}
