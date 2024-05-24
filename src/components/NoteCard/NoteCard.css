@@ -105,3 +105,87 @@ body {
     border-radius: 50%;
     cursor: pointer;
 }
+.taking-full-note {
+    height: 136px;
+    background-color: white;
+    width: 600px;
+    border: 1px solid gray;
+    margin-top: 40px;
+    margin-left: 530px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.taking-full-note-title-container {
+    padding-top: 10px;
+    height: 64px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.title-field {
+    height: 100%;
+    width: 400px;
+    margin-left: 20px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+}
+
+.taking-full-note-pin-field {
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.taking-full-note-text-container {
+    height: 64px;
+    width: 100%;
+}
+
+.text-field {
+    height: 100%;
+    width: 560px;
+    margin-left: 20px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+}
+
+.taking-full-note-footer {
+    /* background-color: aqua; */
+    margin-left: 8px;
+    margin-top: 12px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.taking-full-note-footer-images {
+    display: flex;
+    width: 75%;
+    justify-content: space-between;
+    margin-left: 8px;
+}
+
+.taking-full-note-footer-close-button {
+    margin-right: 20px;
+}
+
+.close-button {
+    outline: none;
+    border: none;
+    width: 80px;
+    height: 32px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.icon {
+    width: 20px;
+    cursor: pointer;
+}
