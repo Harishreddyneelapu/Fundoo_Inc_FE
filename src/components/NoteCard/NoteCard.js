@@ -12,17 +12,35 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Restore from "../../assests/restore-page-svgrepo-com.svg";
+import Undo from "../../assests/undo-svgrepo-com.svg";
+import Redo from "../../assests/redo-svgrepo-com.svg"
 import './NoteCard.css';
 
-import { deleteNoteApiCall, trashNoteApiCall, archiveNoteApiCall, colorNoteApiCall } from "../../services/NoteService";
+import { deleteNoteApiCall, trashNoteApiCall, archiveNoteApiCall, colorNoteApiCall, updateEditNoteApiCall } from "../../services/NoteService";
+
+import { Modal } from "@mui/material";
 
 function NoteCard(props) {
     const { notesList, container, updateList } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [moreAnchorEl, setMoreAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const [openEditNote, setOpenEditNote] = useState(false);
     const moreOpen = Boolean(moreAnchorEl);
-    const [noteData,setNoteData]=useState({});
+    const [noteData, setNoteData] = useState({});
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+
+    const handleUpdatEditNote = async () => {
+            setOpenEditNote(false);
+            console.log("title :", title);
+            console.log("description :", description);
+            
+            const res = await updateEditNoteApiCall(noteData._id,{
+                "title": title,
+                "description": description
+            });
+    }
 
     const colors = [
         { hex: "#FFFFFF", name: "Default", class: "col1" },
@@ -39,14 +57,14 @@ function NoteCard(props) {
         { hex: "#EFEFF1", name: "Chalk", class: "col12" }
     ];
 
-    const handleIconClick =async (event, data, color) => {
+    const handleIconClick = async (event, data, color) => {
         if (event === 'deleteForever') {
             deleteNoteApiCall(data._id);
-            updateList(event,data)
+            updateList(event, data)
         }
         else if (event === 'restore') {
             trashNoteApiCall(data._id);
-            updateList(event,data)
+            updateList(event, data)
         }
         else if (event === 'unarchive') {
             archiveNoteApiCall(data._id);
@@ -56,20 +74,20 @@ function NoteCard(props) {
             archiveNoteApiCall(data._id);
             updateList(event, data);
         }
-        else if(event==='trash'){
+        else if (event === 'trash') {
             handleMoreClose();
             trashNoteApiCall(noteData._id)
-            updateList(event,noteData);
+            updateList(event, noteData);
         }
-        else if(event==='color'){
-            await colorNoteApiCall(data._id,{
-                "color":color
+        else if (event === 'color') {
+            await colorNoteApiCall(data._id, {
+                "color": color
             })
-            updateList(event,{...noteData, color: color})
+            updateList(event, { ...noteData, color: color })
         }
     };
 
-    const handleMoreClick = (event,obj) => {
+    const handleMoreClick = (event, obj) => {
         setNoteData(obj);
         setMoreAnchorEl(event.currentTarget);
     };
@@ -82,10 +100,12 @@ function NoteCard(props) {
         setAnchorEl(null);
     };
 
-    // const handleColorSelect = (color) => {
-    //     console.log("Color selected:", color);
-    //     setAnchorEl(null);
-    // };
+    const handleEditNote = (data) => {
+        setOpenEditNote(!openEditNote)
+        setTitle(data.title)
+        setDescription(data.description)
+        setNoteData(data)
+    }
 
     return (
         <>
@@ -93,26 +113,26 @@ function NoteCard(props) {
                 {notesList.map(noteObj => {
                     return (
                         <div className="note-cnt" key={noteObj._id}>
-                            <div className="note-card" style={{backgroundColor: noteObj?.color}}>
-                                <div className="note-card-title-container">
+                            <div className="note-card" style={{ backgroundColor: noteObj?.color }}>
+                                <div className="note-card-title-container" onClick={() => { setOpenEditNote(true); handleEditNote(noteObj) }}>
                                     <span className="note-card-title">{noteObj.title}</span>
                                     <Tooltip title="Pin">
-                                        <span className="note-card-pin-field">
+                                        <div className="note-card-pin-field">
                                             <img src={PIN_ICON} alt="Pin" className="icon" />
-                                        </span>
+                                        </div>
                                     </Tooltip>
                                 </div>
-                                <span className="note-card-description">{noteObj.description}</span>
+                                <span className="note-card-description" onClick={() => { setOpenEditNote(true); handleEditNote(noteObj) }}>{noteObj.description}</span>
                                 <div className="note-card-footer">
                                     {container === "trashCnt" ? <><Tooltip title="Delete Forever">
                                         <div className="note-card-footer-image">
                                             <img src={Delete_Forever} alt="Delete Forever" className="icon" onClick={() => handleIconClick('deleteForever', noteObj)} />
                                         </div>
                                     </Tooltip><Tooltip title="Restore">
-                                        <div className="note-card-footer-image">
-                                            <img src={Restore} alt="Restore" className="icon" onClick={() => handleIconClick('restore', noteObj)} />
-                                        </div>
-                                    </Tooltip></>
+                                            <div className="note-card-footer-image">
+                                                <img src={Restore} alt="Restore" className="icon" onClick={() => handleIconClick('restore', noteObj)} />
+                                            </div>
+                                        </Tooltip></>
                                         : <>
                                             <Tooltip title="Remind me">
                                                 <div className="note-card-footer-image">
@@ -124,11 +144,11 @@ function NoteCard(props) {
                                                 </div>
                                             </Tooltip><Tooltip title="Background color">
                                                 <div className="note-card-footer-image">
-                                                    <img src={Background_color} alt="Background Color" className="icon cursor-pointer" 
-                                                    onClick={(e) => {
-                                                        setNoteData(noteObj)
-                                                        setAnchorEl(e.currentTarget)
-                                                    }}
+                                                    <img src={Background_color} alt="Background Color" className="icon cursor-pointer"
+                                                        onClick={(e) => {
+                                                            setNoteData(noteObj)
+                                                            setAnchorEl(e.currentTarget)
+                                                        }}
                                                     />
                                                 </div>
                                             </Tooltip>
@@ -150,7 +170,7 @@ function NoteCard(props) {
                                             }
                                             <Tooltip title="More options">
                                                 <div className="note-card-footer-image">
-                                                    <img src={More} alt="More options" className="icon cursor-pointer" onClick={(e)=>handleMoreClick(e,noteObj)} />
+                                                    <img src={More} alt="More options" className="icon cursor-pointer" onClick={(e) => handleMoreClick(e, noteObj)} />
                                                 </div>
                                             </Tooltip>
                                         </>
@@ -169,7 +189,7 @@ function NoteCard(props) {
                                                 <div
                                                     className="color"
                                                     style={{ backgroundColor: color.hex }}
-                                                    onClick={() => handleIconClick('color',noteData,color.hex)}
+                                                    onClick={() => handleIconClick('color', noteData, color.hex)}
                                                 ></div>
                                             </Tooltip>
                                         ))}
@@ -181,13 +201,80 @@ function NoteCard(props) {
                                 open={moreOpen}
                                 onClose={handleMoreClose}
                             >
-                                <MenuItem onClick={() => handleIconClick('trash',noteObj)}>Delete note</MenuItem>
+                                <MenuItem onClick={() => handleIconClick('trash', noteObj)}>Delete note</MenuItem>
                                 <MenuItem >Duplicate note</MenuItem>
                                 <MenuItem >Copy link</MenuItem>
                             </Menu>
+
                         </div>
                     )
                 })}
+                <Modal
+                    open={openEditNote}
+                    onClose={() => setOpenEditNote(false)}
+
+                >
+                    <div className="taking-full-note">
+                        <div className="taking-full-note-title-container">
+                            <input type="text" id="taking-full-note-title-field" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="title-field" />
+                            <Tooltip title="Pin">
+                                <span className="taking-full-note-pin-field">
+                                    <img src={PIN_ICON} id="pin-field" alt="Pin" className="icon" />
+                                </span>
+                            </Tooltip>
+                        </div>
+                        <span className="taking-full-note-text-container">
+                            <input type="text" id="taking-full-note-text-field" placeholder="Take a note.." value={description} onChange={(e) => setDescription(e.target.value)} className="text-field" />
+                        </span>
+                        <div className="taking-full-note-footer">
+                            <div className="taking-full-note-footer-images">
+                                <Tooltip title="Reminder">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={Reminder} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="Collaborator">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={Collaborator} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="Background Color">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={Background_color} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="File Image">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={File_Image} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="Archive">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={Archive} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="More Options">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={More} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="Undo">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={Undo} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title="Redo">
+                                    <div className="taking-full-note-footer-image">
+                                        <img src={Redo} alt="" className="icon" />
+                                    </div>
+                                </Tooltip>
+                            </div>
+                            <div className="taking-full-note-footer-close-button">
+                                <button id="close-button" onClick={handleUpdatEditNote} className="close-button">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         </>
     );
